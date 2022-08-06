@@ -5,6 +5,10 @@ const cors = require("cors");
 const helmet = require("helmet");
 
 const connectDB = require("./config/db");
+const errorHandler = require("./middleware/error");
+
+// Importing router
+const uriRoutes = require("./routes/uri-shortner.route");
 
 // Determine the environment
 if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
@@ -28,7 +32,11 @@ app.use(helmet());
 // Body Parser
 app.use(express.json());
 
-app.get("/", (req, res) => res.send("Hai"));
+// Router Configs
+app.use("/api/v1/uri", uriRoutes);
+
+// Error Middleware
+app.use(errorHandler);
 
 const server = http.createServer(app);
 
@@ -41,7 +49,7 @@ const mainserver = server.listen(
 
 // Handle unhandled promise rejections
 process.on("unhandledRejection", (err, promise) => {
-  console.log(`Error: ${err.message}`.red);
+  console.log(`Error: ${err.message}`);
   // Close server & exit server
   mainserver.close(() => process.exit(1));
 });
