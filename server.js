@@ -4,6 +4,8 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const helmet = require("helmet");
 
+const connectDB = require("./config/db");
+
 // Determine the environment
 if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
   dotenv.config({ path: "./config/.env.local" });
@@ -13,6 +15,9 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
 
 // Init express
 const app = express();
+
+// Connect to DB
+connectDB();
 
 // Initialising cors
 app.use(cors());
